@@ -25,11 +25,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
 
-            return response()->json([
-
-                'message' => 'Validation Error',
-                'data' => $validator->errors(),
-            ], 422);
+            return send_error('Validation Error', $validator->errors(), 422);
         }
 
         try {
@@ -38,16 +34,14 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'User registration successfull',
-                'user' => $user
-            ]);
+            $data = [
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+            return send_response('User registration successfull', $data);
         } catch (Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], $e->getCode());
+
+            return send_error($e->getMessage(), $e->getCode());
         }
     }
 }
