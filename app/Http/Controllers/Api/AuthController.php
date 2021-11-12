@@ -69,4 +69,21 @@ class AuthController extends Controller
             return send_error($e->getMessage(), $e->getCode());
         }
     }
+
+
+    /**
+     * Logout
+     */
+    public function logout(Request $request)
+    {
+        auth()->user()->token()->revoke();
+
+        return response()->json(['message' => 'Successfully Logged out']);
+    }
+
+
+
+    public function show()
+    {
+    }
 }
