@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        $all_user = User::all();
+        return send_response('Success', $all_user);
+    }
+
+
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -66,7 +75,7 @@ class AuthController extends Controller
             return send_response('User registration successfull', $data);
         } catch (Exception $e) {
 
-            return send_error($e->getMessage(), $e->getCode());
+            return send_error('Something wrong !', $e->getCode());
         }
     }
 
@@ -83,7 +92,14 @@ class AuthController extends Controller
 
 
 
-    public function show()
+    public function show($id)
     {
+        $user = User::find($id);
+
+        if ($user) {
+            return send_response('Success', $user);
+        } else {
+            return send_error('Data not found');
+        }
     }
 }
